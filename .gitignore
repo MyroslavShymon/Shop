@@ -1,0 +1,16 @@
+/api/node_modules
+/api/public/hot
+/api/public/storage
+/api/storage/*.key
+/api/vendor
+/api.env
+/api.env.backup
+/api.phpunit.result.cache
+/apidocker-compose.override.yml
+/apiHomestead.json
+/apiHomestead.yaml
+/apinpm-debug.log
+/apiyarn-error.log
+/api/.idea
+/api/.vscode
+/app/node_modules
