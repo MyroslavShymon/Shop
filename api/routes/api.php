@@ -21,7 +21,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('image/{filename}','Photo\PhotoController@image');
 
 //posts
-Route::get('posts', 'Post\PostController@post');
+
+Route::group(['middleware' => ['jwt.verify']], function() {
+    Route::get('posts', 'Post\PostController@post');
+});
 Route::get('posts/{id}', 'Post\PostController@postById');
 Route::get('posts/category/{id}', 'Post\PostController@postByCategoryId');
 
