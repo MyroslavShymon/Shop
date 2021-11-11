@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class Comment extends Migration
+class CreateBasketsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class Comment extends Migration
      */
     public function up()
     {
-        Schema::create('comment', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('text');
-            $table->integer('likes')->default(0);
-            $table->integer('user_id');
-            $table->integer('post_id');
+        Schema::create('baskets', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
     }
@@ -30,6 +27,6 @@ class Comment extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('baskets');
     }
 }

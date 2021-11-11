@@ -53,3 +53,4 @@ Route::post('category', 'Category\CategoryController@categorySave');
 //user
 Route::post('auth/registration', 'User\UserController@registration');
 Route::post('auth/login', 'User\UserController@login');
+Route::get('get-users', 'User\UserController@get_user');

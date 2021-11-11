@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Basket;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use JWTAuth;
@@ -119,14 +121,12 @@ class UserController extends Controller
         }
     }
 
-//    public function get_user(Request $request)
-//    {
-//        $this->validate($request, [
-//            'token' => 'required'
-//        ]);
-//
-//        $user = JWTAuth::authenticate($request->token);
-//
-//        return response()->json(['user' => $user]);
-//    }
+    //try left join
+    public function get_user(Request $request)
+    {
+        $users = User::leftJoin('baskets', function($join) {
+            $join->on('users.id', '=', 'baskets.user_id');
+        })->get();
+        return response()->json(['users' => $users]);
+    }
 }
