@@ -8,4 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class ProductBasket extends Model
 {
     use HasFactory;
+    protected $table = "product_baskets";
+
+    protected $fillable = [
+        'id',
+        'product_id',
+        'basket_id',
+    ];
 }
