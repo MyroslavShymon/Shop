@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Product;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Product\ProductCommentService;
+use App\Http\Services\Product\ProductLikeCommentService;
 use App\Http\Services\Product\ProductService;
 use App\Http\Services\Product\ProductBasketService;
 use App\Http\Services\Product\ProductBrandService;
@@ -22,14 +24,18 @@ class ProductController extends Controller
     private ProductBrandService $productBrandService;
     private ProductTypeService $productTypeService;
     private ProductTagService $productTagService;
+    private ProductCommentService $productCommentService;
+    private ProductLikeCommentService $productLikeCommentService;
 
     public function __construct(
-        ProductService       $productService,
-        ValidatorService     $validatorService,
-        ProductBasketService $productBasketService,
-        ProductBrandService  $productBrandService,
-        ProductTypeService   $productTypeService,
-        ProductTagService    $productTagService
+        ProductService            $productService,
+        ValidatorService          $validatorService,
+        ProductBasketService      $productBasketService,
+        ProductBrandService       $productBrandService,
+        ProductTypeService        $productTypeService,
+        ProductTagService         $productTagService,
+        ProductCommentService     $productCommentService,
+        ProductLikeCommentService $productLikeCommentService
     )
     {
         $this->productBasketService = $productBasketService;
@@ -38,6 +44,8 @@ class ProductController extends Controller
         $this->productBrandService = $productBrandService;
         $this->productTypeService = $productTypeService;
         $this->productTagService = $productTagService;
+        $this->productCommentService = $productCommentService;
+        $this->productLikeCommentService = $productLikeCommentService;
     }
 
     public function create(Request $request): \Illuminate\Http\JsonResponse
@@ -117,5 +125,46 @@ class ProductController extends Controller
         ])) return $errors;
 
         return $this->productTagService->addTagToProduct($request);
+    }
+
+    public function addComment(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'text' => 'required|max:256',
+            'user_id' => 'required',
+            'product_id' => 'required',
+        ])) return $errors;
+
+        return $this->productCommentService->addCommentToProduct($request);
+    }
+
+    public function getComments($id): \Illuminate\Support\Collection
+    {
+        return $this->productCommentService->getProductComments($id);
+    }
+
+    public function likeComment(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required',
+            'comment_product_id' => 'required',
+        ])) return $errors;
+
+        return $this->productLikeCommentService->likeComment($request);
+    }
+
+    public function dislikeComment(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required',
+            'comment_product_id' => 'required',
+        ])) return $errors;
+
+        return $this->productLikeCommentService->dislikeComment($request);
+    }
+
+    public function getLikesTotalCount($id)
+    {
+        return $this->productLikeCommentService->getLikesTotalCount($id);
     }
 }

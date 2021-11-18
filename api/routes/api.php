@@ -28,10 +28,15 @@ Route::get('product/views/{id}', 'Product\ProductController@addViews');
 Route::get('product/brand/{id}', 'Product\ProductController@getByBrandId');
 Route::get('product/type/{id}', 'Product\ProductController@getByTypeId');
 Route::get('product/tag/{id}', 'Product\ProductController@getByTagId');
+Route::get('product/comment/{id}', 'Product\ProductController@getComments');
+Route::get('product/comment-likes/{id}', 'Product\ProductController@getLikesTotalCount');
+Route::post('product/like/comment', 'Product\ProductController@likeComment');
 Route::post('product', 'Product\ProductController@create');
 Route::post('product/basket', 'Product\ProductController@addToBasket');
 Route::post('product/add-tag', 'Product\ProductController@addToProduct');
+Route::post('product/comment', 'Product\ProductController@addComment');
 Route::delete('product/{id}', 'Product\ProductController@deleteById');
+Route::delete('product/dislike/comment', 'Product\ProductController@dislikeComment');
 
 //role
 Route::post('role', 'Role\RoleController@create');
