@@ -27,8 +27,10 @@ Route::get('product/user/{id}', 'Product\ProductController@getByUserId');
 Route::get('product/views/{id}', 'Product\ProductController@addViews');
 Route::get('product/brand/{id}', 'Product\ProductController@getByBrandId');
 Route::get('product/type/{id}', 'Product\ProductController@getByTypeId');
+Route::get('product/tag/{id}', 'Product\ProductController@getByTagId');
 Route::post('product', 'Product\ProductController@create');
 Route::post('product/basket', 'Product\ProductController@addToBasket');
+Route::post('product/add-tag', 'Product\ProductController@addToProduct');
 Route::delete('product/{id}', 'Product\ProductController@deleteById');
 
 //role
@@ -47,6 +49,12 @@ Route::post('type', 'Type\TypeController@create');
 Route::get('type', 'Type\TypeController@getAll');
 Route::get('type/{id}', 'Type\TypeController@getById');
 Route::delete('type/{id}', 'Type\TypeController@deleteById');
+
+//Tag
+Route::post('tag', 'Tag\TagController@create');
+Route::get('tag', 'Tag\TagController@getAll');
+Route::get('tag/{id}', 'Tag\TagController@getById');
+Route::delete('tag/{id}', 'Tag\TagController@deleteById');
 
 //type
 //Route::post('type', 'Type\TypeController@create');

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Services\Product\ProductService;
 use App\Http\Services\Product\ProductBasketService;
 use App\Http\Services\Product\ProductBrandService;
+use App\Http\Services\Product\ProductTagService;
 use App\Http\Services\Product\ProductTypeService;
 use App\Http\Services\Validator\ValidatorService;
 use ClassTransformer\ClassTransformer;
@@ -20,13 +21,15 @@ class ProductController extends Controller
     private ProductBasketService $productBasketService;
     private ProductBrandService $productBrandService;
     private ProductTypeService $productTypeService;
+    private ProductTagService $productTagService;
 
     public function __construct(
         ProductService       $productService,
         ValidatorService     $validatorService,
         ProductBasketService $productBasketService,
         ProductBrandService  $productBrandService,
-        ProductTypeService   $productTypeService
+        ProductTypeService   $productTypeService,
+        ProductTagService    $productTagService
     )
     {
         $this->productBasketService = $productBasketService;
@@ -34,6 +37,7 @@ class ProductController extends Controller
         $this->productService = $productService;
         $this->productBrandService = $productBrandService;
         $this->productTypeService = $productTypeService;
+        $this->productTagService = $productTagService;
     }
 
     public function create(Request $request): \Illuminate\Http\JsonResponse
@@ -98,5 +102,20 @@ class ProductController extends Controller
     public function getByTypeId($id)
     {
         return $this->productTypeService->getProductsWithType($id);
+    }
+
+    public function getByTagId($id)
+    {
+        return $this->productTagService->getProductsWithTag($id);
+    }
+
+    public function addToProduct(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'tag_id' => 'required',
+            'product_id' => 'required',
+        ])) return $errors;
+
+        return $this->productTagService->addTagToProduct($request);
     }
 }

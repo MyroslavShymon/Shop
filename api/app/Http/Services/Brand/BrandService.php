@@ -43,10 +43,10 @@ class BrandService
 
     public function getBrandById($id): array
     {
-        $product = Brand::find($id);
-        if (is_null($product)) {
+        $brand = Brand::find($id);
+        if (is_null($brand)) {
             return ['data' => ['error' => true, 'message' => 'Not found'], 'code' => 404];
         };
-        return ['data' => $product, 'code' => 200];
+        return ['data' => $brand, 'code' => 200];
     }
 }
