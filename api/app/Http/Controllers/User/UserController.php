@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Basket\BasketService;
+use App\Http\Services\Role\RoleService;
+use App\Http\Services\Validator\ValidatorService;
 use App\Models\Basket;
+use App\Models\Role;
 use App\Models\User;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -12,9 +17,21 @@ use Illuminate\Support\Facades\Hash;
 use Validator;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
+use function MongoDB\BSON\fromJSON;
 
 class UserController extends Controller
 {
+    private ValidatorService $validatorService;
+    private BasketService $basketService;
+    private RoleService $roleService;
+
+    public function __construct(RoleService $roleService, ValidatorService $validatorService, BasketService $basketService)
+    {
+        $this->validatorService = $validatorService;
+        $this->roleService = $roleService;
+        $this->basketService = $basketService;
+    }
+
     public function registration(Request $request)
     {
         $credentials = $request->only('email', 'password');
@@ -31,18 +48,31 @@ class UserController extends Controller
             return response()->json(['error' => $validator->messages()], 200);
         }
 
+
         //Request is valid, create new user
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => bcrypt($request->password)
+            'password' => bcrypt($request->password),
         ]);
+
+        $userRole = Role::where('name', 'User')->first();
+
+        UserRole::create([
+            'role_id' => $userRole->id,
+            'user_id' => $user->id
+        ]);
+
+        $this->basketService->createBasket($user->id);
 
         //User created, return success response
         return response()->json([
             'success' => true,
             'message' => 'User created successfully',
-            'data' => $user,
+            'data' => [
+                'user' => $user,
+                'role' => $userRole
+            ],
             'token' => JWTAuth::attempt($credentials)
         ], Response::HTTP_OK);
     }
@@ -87,12 +117,15 @@ class UserController extends Controller
             'token' => $this->createNewToken($token),
         ]);
     }
-    protected function createNewToken($token){
+
+    protected function createNewToken($token)
+    {
         return response()->json([
             'access_token' => $token,
             'user' => auth()->user()
         ]);
     }
+
     public function logout(Request $request)
     {
         //valid credential
@@ -124,7 +157,7 @@ class UserController extends Controller
     //try left join
     public function get_user(Request $request)
     {
-        $users = User::leftJoin('baskets', function($join) {
+        $users = User::leftJoin('baskets', function ($join) {
             $join->on('users.id', '=', 'baskets.user_id');
         })->get();
         return response()->json(['users' => $users]);
