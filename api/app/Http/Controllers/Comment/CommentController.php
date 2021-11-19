@@ -3,72 +3,70 @@
 namespace App\Http\Controllers\Comment;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Post\PostCommentService;
+use App\Http\Services\Validator\ValidatorService;
 use App\Models\Models\CommentModel;
 use Illuminate\Http\Request;
 use Validator;
 
 class CommentController extends Controller
 {
-    public function commentByPostId($id): \Illuminate\Http\JsonResponse
+    private PostCommentService $postCommentService;
+    private ValidatorService $validatorService;
+
+    public function __construct(PostCommentService $postCommentService, ValidatorService $validatorService)
     {
-        $comment = CommentModel::where('post_id', $id)->get();
-
-        if (is_null($comment)) {
-            return response()->json(['error' => true, 'message' => 'Not found'], 404);
-        }
-
-        return response()->json($comment, 200);
+        $this->postCommentService = $postCommentService;
+        $this->validatorService = $validatorService;
     }
 
-    public function commentSave(Request $req): \Illuminate\Http\JsonResponse
+    public function add(Request $request)
     {
-        $rules = [
+        if ($errors = $this->validatorService->validate($request, [
             'text' => 'required',
-        ];
-        $validator = Validator::make($req->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+        ])) return $errors;
 
-        $comment = CommentModel::create($req->all());
-        return response()->json($comment, 201);
+        return $this->postCommentService->createPost($request);
     }
 
-    public function likeComment($id): \Illuminate\Http\JsonResponse
+    public function getById($id): \Illuminate\Http\JsonResponse
     {
-        $comment = CommentModel::find($id);
-        if (is_null($comment)) {
-            return response()->json(['error' => true, 'message' => 'Not found'], 404);
-        }
-        $comment["likes"] = $comment["likes"] + 1;
-        $comment->save();
+        ['data' => $comment, 'code' => $code] = $this->postCommentService->getCommentById($id);
+        if ($comment['error'])
+            return response()->json($comment, $code);
+
         return response()->json($comment, 200);
     }
 
-    public function commentEdit(Request $req, $id): \Illuminate\Http\JsonResponse
+    public function getByPostId($id): \Illuminate\Http\JsonResponse
     {
-        $rules = [
+        return $this->postCommentService->getCommentByPostId($id);
+    }
+
+//    public function likeComment($id): \Illuminate\Http\JsonResponse
+//    {
+//        $comment = CommentModel::find($id);
+//        if (is_null($comment)) {
+//            return response()->json(['error' => true, 'message' => 'Not found'], 404);
+//        }
+//        $comment["likes"] = $comment["likes"] + 1;
+//        $comment->save();
+//        return response()->json($comment, 200);
+//    }
+
+    public function commentEdit(Request $request, $id): \Illuminate\Http\JsonResponse
+    {
+        if ($errors = $this->validatorService->validate($request, [
             'text' => 'required',
-        ];
-        $validator = Validator::make($req->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
-        }
-        $comment = CommentModel::find($id);
-        if (is_null($comment)) {
-            return response()->json(['error' => true, 'message' => 'Not found'], 404);
-        }
-        $comment->update($req->all());
-        return response()->json($comment, 200);
+        ])) return $errors;
+
+        return $this->postCommentService->editComment($request, $id);
     }
 
-    public function commentDelete(Request $req, $id): \Illuminate\Http\JsonResponse
+    public function commentDelete($id): \Illuminate\Http\JsonResponse
     {
-        $comment = CommentModel::find($id);
-        if (is_null($comment)) {
-            return response()->json(['error' => true, 'message' => 'Not found'], 404);
-        }
-        $comment->delete();
-        return response()->json('', 204);
+        return $this->postCommentService->deleteComment($id);
     }
 }

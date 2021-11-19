@@ -32,5 +32,8 @@ class DatabaseSeeder extends Seeder
         \App\Models\CommentProduct::factory(50)->create();
         \App\Models\UserLikeProduct::factory(50)->create();
         \App\Models\UserLikeProductComment::factory(50)->create();
+        \App\Models\Friend::factory(100)->create();
+        \App\Models\Message::factory(5000)->create();
+        \App\Models\UserLikePost::factory(50)->create();
     }
 }

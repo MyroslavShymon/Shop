@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class UserLikeProductFactory extends Factory
+class MessageFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,8 +14,9 @@ class UserLikeProductFactory extends Factory
     public function definition()
     {
         return [
-            'product_id' => $this->faker->numberBetween(1, 50),
-            'user_id' => $this->faker->numberBetween(1, 30),
+            'from_user_id' => $this->faker->numberBetween(1, 30),
+            'to_user_id' => $this->faker->numberBetween(1, 30),
+            'text' => $this->faker->text(),
         ];
     }
 }

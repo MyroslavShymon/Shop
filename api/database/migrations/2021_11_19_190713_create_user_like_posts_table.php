@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateUserLikeProductsTable extends Migration
+class CreateUserLikePostsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateUserLikeProductsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_like_products', function (Blueprint $table) {
+        Schema::create('user_like_posts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('product_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('post_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ class CreateUserLikeProductsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_like_products');
+        Schema::dropIfExists('user_like_posts');
     }
 }

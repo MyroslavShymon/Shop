@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Comment extends Model
+class UserLikePost extends Model
 {
     use HasFactory;
-    protected $table = "comments";
+
+    protected $table = "user_like_posts";
 
     protected $fillable = [
         'id',
-        'text',
-        'user_id',
         'post_id',
+        'user_id'
     ];
 }

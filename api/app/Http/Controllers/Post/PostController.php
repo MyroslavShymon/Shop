@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Post;
 
 use App\Http\Controllers\Controller;
+use App\Http\Services\Post\PostLikeService;
 use App\Http\Services\Post\PostService;
 use App\Http\Services\Validator\ValidatorService;
 use App\Models\Post;
@@ -17,9 +18,15 @@ class PostController extends Controller
 {
     private ValidatorService $validatorService;
     private PostService $postService;
+    private PostLikeService $postLikeService;
 
-    public function __construct(ValidatorService $validatorService, PostService $postService)
+    public function __construct(
+        ValidatorService $validatorService,
+        PostService      $postService,
+        PostLikeService  $postLikeService
+    )
     {
+        $this->postLikeService = $postLikeService;
         $this->validatorService = $validatorService;
         $this->postService = $postService;
     }
@@ -78,5 +85,32 @@ class PostController extends Controller
     public function postDelete($id)
     {
         return $this->postService->postDelete($id);
+    }
+
+    public function likePost(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+        ])) return $errors;
+
+        return $this->postLikeService->likePost($request);
+
+    }
+
+    public function dislikePost(Request $request)
+    {
+        error_log("req");
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required|numeric',
+            'post_id' => 'required|numeric',
+        ])) return $errors;
+        return $this->postLikeService->dislikePost($request);
+
+    }
+
+    public function getLikesTotalCount($id)
+    {
+        return $this->postLikeService->getLikesTotalCount($id);
     }
 }

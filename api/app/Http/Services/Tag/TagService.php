@@ -2,19 +2,11 @@
 
 namespace App\Http\Services\Tag;
 
-use App\Http\Services\File\FileService;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 
 class TagService
 {
-    private FileService $fileService;
-
-    public function __construct(FileService $fileService)
-    {
-        $this->fileService = $fileService;
-    }
-
     public function createTag(Request $request): \Illuminate\Http\JsonResponse
     {
         return response()->json(Tag::create($request->all()), 201);
