@@ -73,17 +73,18 @@ Route::get('rating/{id}', 'Product\ProductController@getProductRating');
 //posts
 
 //Route::group(['middleware' => ['jwt.verify']], function() {
-    Route::get('posts', 'Post\PostController@post');
+    Route::get('post', 'Post\PostController@getAll');
 //});
-Route::get('posts/{id}', 'Post\PostController@postById');
-Route::get('posts/category/{id}', 'Post\PostController@postByCategoryId');
+Route::get('post/{id}', 'Post\PostController@postById');
+Route::get('post/user/{id}', 'Post\PostController@getByUserId');
+//Route::get('post/category/{id}', 'Post\PostController@postByCategoryId');
 
-Route::post('posts', 'Post\PostController@postSave');
-Route::post('posts/like/{id}', 'Post\PostController@likePost');
+Route::post('post', 'Post\PostController@postSave');
+//Route::post('post/like/{id}', 'Post\PostController@likePost');
 
-Route::put('posts/{id}', 'Post\PostController@postEdit');
+Route::put('post/{id}', 'Post\PostController@postEdit');
 
-Route::delete('posts/{id}', 'Post\PostController@postDelete');
+Route::delete('post/{id}', 'Post\PostController@postDelete');
 //
 ////comment
 //Route::get('comment/{id}', 'Comment\CommentController@commentByPostId');
