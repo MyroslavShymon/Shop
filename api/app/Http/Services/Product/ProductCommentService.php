@@ -13,24 +13,27 @@ class ProductCommentService
 {
     private ProductService $productService;
     private UserService $userService;
+    private ProductUserValidate $productUserValidate;
 
-    public function __construct(ProductService $productService, UserService $userService)
+    public function __construct(
+        ProductService $productService,
+        UserService $userService,
+        ProductUserValidate $productUserValidate
+    )
     {
         $this->productService = $productService;
         $this->userService = $userService;
+        $this->productUserValidate = $productUserValidate;
     }
 
     public function addCommentToProduct(Request $request): \Illuminate\Http\JsonResponse
     {
         $req = $request->all();
 
-        ['data' => $product, 'code' => $code] = $this->productService->getProductById($req['product_id']);
-        if ($product['error'])
-            return response()->json($product, $code);
-
-        ['data' => $user, 'code' => $code] = $this->userService->getUserById($req['user_id']);
-        if ($user['error'])
-            return response()->json($user, $code);
+        $valid = $this->productUserValidate->validate($req);
+        if ($valid != 'success') {
+            return $valid;
+        }
 
         return response()->json(CommentProduct::create($req), 201);
     }

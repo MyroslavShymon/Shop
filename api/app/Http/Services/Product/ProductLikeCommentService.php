@@ -26,9 +26,9 @@ class ProductLikeCommentService
 
     private function validateLikeRequest($req)
     {
-        ['data' => $product, 'code' => $code] = $this->productCommentService->getProductCommentById($req['comment_product_id']);
-        if ($product['error'])
-            return response()->json($product, $code);
+        ['data' => $product_comment, 'code' => $code] = $this->productCommentService->getProductCommentById($req['comment_product_id']);
+        if ($product_comment['error'])
+            return response()->json($product_comment, $code);
 
         ['data' => $user, 'code' => $code] = $this->userService->getUserById($req['user_id']);
         if ($user['error'])

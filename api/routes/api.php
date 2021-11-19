@@ -55,30 +55,35 @@ Route::get('type', 'Type\TypeController@getAll');
 Route::get('type/{id}', 'Type\TypeController@getById');
 Route::delete('type/{id}', 'Type\TypeController@deleteById');
 
-//Tag
+//tag
 Route::post('tag', 'Tag\TagController@create');
 Route::get('tag', 'Tag\TagController@getAll');
 Route::get('tag/{id}', 'Tag\TagController@getById');
 Route::delete('tag/{id}', 'Tag\TagController@deleteById');
 
+//rating
+Route::post('rating', 'Product\ProductController@addRating');
+Route::get('rating/{id}', 'Product\ProductController@getProductRating');
+
+
 //type
 //Route::post('type', 'Type\TypeController@create');
 
 
-////posts
-//
+//posts
+
 //Route::group(['middleware' => ['jwt.verify']], function() {
-//    Route::get('posts', 'Post\PostController@post');
+    Route::get('posts', 'Post\PostController@post');
 //});
-//Route::get('posts/{id}', 'Post\PostController@postById');
-//Route::get('posts/category/{id}', 'Post\PostController@postByCategoryId');
-//
-//Route::post('posts', 'Post\PostController@postSave');
-//Route::post('posts/like/{id}', 'Post\PostController@likePost');
-//
-//Route::put('posts/{id}', 'Post\PostController@postEdit');
-//
-//Route::delete('posts/{id}', 'Post\PostController@postDelete');
+Route::get('posts/{id}', 'Post\PostController@postById');
+Route::get('posts/category/{id}', 'Post\PostController@postByCategoryId');
+
+Route::post('posts', 'Post\PostController@postSave');
+Route::post('posts/like/{id}', 'Post\PostController@likePost');
+
+Route::put('posts/{id}', 'Post\PostController@postEdit');
+
+Route::delete('posts/{id}', 'Post\PostController@postDelete');
 //
 ////comment
 //Route::get('comment/{id}', 'Comment\CommentController@commentByPostId');

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Product;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Product\ProductCommentService;
 use App\Http\Services\Product\ProductLikeCommentService;
+use App\Http\Services\Product\ProductRatingService;
 use App\Http\Services\Product\ProductService;
 use App\Http\Services\Product\ProductBasketService;
 use App\Http\Services\Product\ProductBrandService;
@@ -26,6 +27,7 @@ class ProductController extends Controller
     private ProductTagService $productTagService;
     private ProductCommentService $productCommentService;
     private ProductLikeCommentService $productLikeCommentService;
+    private ProductRatingService $productRatingService;
 
     public function __construct(
         ProductService            $productService,
@@ -35,7 +37,8 @@ class ProductController extends Controller
         ProductTypeService        $productTypeService,
         ProductTagService         $productTagService,
         ProductCommentService     $productCommentService,
-        ProductLikeCommentService $productLikeCommentService
+        ProductLikeCommentService $productLikeCommentService,
+        ProductRatingService      $productRatingService
     )
     {
         $this->productBasketService = $productBasketService;
@@ -46,6 +49,7 @@ class ProductController extends Controller
         $this->productTagService = $productTagService;
         $this->productCommentService = $productCommentService;
         $this->productLikeCommentService = $productLikeCommentService;
+        $this->productRatingService = $productRatingService;
     }
 
     public function create(Request $request): \Illuminate\Http\JsonResponse
@@ -55,10 +59,10 @@ class ProductController extends Controller
             'name' => 'required|min:2|max:256|unique:products',
             'image' => 'required',
             'description' => 'required',
-            'price' => 'required',
-            'user_id' => 'required',
-            'brand_id' => 'required',
-            'type_id' => 'required',
+            'price' => 'required|numeric',
+            'user_id' => 'required|numeric',
+            'brand_id' => 'required|numeric',
+            'type_id' => 'required|numeric',
         ])) return $errors;
         return $this->productService->createProduct($request);
     }
@@ -90,8 +94,8 @@ class ProductController extends Controller
     public function addToBasket(Request $request)
     {
         if ($errors = $this->validatorService->validate($request, [
-            'basket_id' => 'required',
-            'product_id' => 'required',
+            'basket_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
         ])) return $errors;
 
         return $this->productBasketService->addProductToBasket($request);
@@ -120,8 +124,8 @@ class ProductController extends Controller
     public function addToProduct(Request $request)
     {
         if ($errors = $this->validatorService->validate($request, [
-            'tag_id' => 'required',
-            'product_id' => 'required',
+            'tag_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
         ])) return $errors;
 
         return $this->productTagService->addTagToProduct($request);
@@ -131,8 +135,8 @@ class ProductController extends Controller
     {
         if ($errors = $this->validatorService->validate($request, [
             'text' => 'required|max:256',
-            'user_id' => 'required',
-            'product_id' => 'required',
+            'user_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
         ])) return $errors;
 
         return $this->productCommentService->addCommentToProduct($request);
@@ -146,8 +150,8 @@ class ProductController extends Controller
     public function likeComment(Request $request)
     {
         if ($errors = $this->validatorService->validate($request, [
-            'user_id' => 'required',
-            'comment_product_id' => 'required',
+            'user_id' => 'required|numeric',
+            'comment_product_id' => 'required|numeric',
         ])) return $errors;
 
         return $this->productLikeCommentService->likeComment($request);
@@ -156,8 +160,8 @@ class ProductController extends Controller
     public function dislikeComment(Request $request)
     {
         if ($errors = $this->validatorService->validate($request, [
-            'user_id' => 'required',
-            'comment_product_id' => 'required',
+            'user_id' => 'required|numeric',
+            'comment_product_id' => 'required|numeric',
         ])) return $errors;
 
         return $this->productLikeCommentService->dislikeComment($request);
@@ -166,5 +170,20 @@ class ProductController extends Controller
     public function getLikesTotalCount($id)
     {
         return $this->productLikeCommentService->getLikesTotalCount($id);
+    }
+
+    public function addRating(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+            'rate' => 'max:5|min:1|required|numeric',
+        ])) return $errors;
+       return $this->productRatingService->addRating($request);
+    }
+
+    public function getProductRating($id): \Illuminate\Http\JsonResponse
+    {
+        return $this->productRatingService->getTotalRatingOfProduct($id);
     }
 }
