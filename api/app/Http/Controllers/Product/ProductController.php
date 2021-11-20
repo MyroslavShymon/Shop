@@ -11,6 +11,7 @@ use App\Http\Services\Product\ProductBasketService;
 use App\Http\Services\Product\ProductBrandService;
 use App\Http\Services\Product\ProductTagService;
 use App\Http\Services\Product\ProductTypeService;
+use App\Http\Services\Product\ProductUserLikeService;
 use App\Http\Services\Validator\ValidatorService;
 use ClassTransformer\ClassTransformer;
 use Illuminate\Http\Request;
@@ -28,6 +29,7 @@ class ProductController extends Controller
     private ProductCommentService $productCommentService;
     private ProductLikeCommentService $productLikeCommentService;
     private ProductRatingService $productRatingService;
+    private ProductUserLikeService $productUserLikeService;
 
     public function __construct(
         ProductService            $productService,
@@ -38,7 +40,8 @@ class ProductController extends Controller
         ProductTagService         $productTagService,
         ProductCommentService     $productCommentService,
         ProductLikeCommentService $productLikeCommentService,
-        ProductRatingService      $productRatingService
+        ProductRatingService      $productRatingService,
+        ProductUserLikeService $productUserLikeService
     )
     {
         $this->productBasketService = $productBasketService;
@@ -50,6 +53,7 @@ class ProductController extends Controller
         $this->productCommentService = $productCommentService;
         $this->productLikeCommentService = $productLikeCommentService;
         $this->productRatingService = $productRatingService;
+        $this->productUserLikeService = $productUserLikeService;
     }
 
     public function create(Request $request): \Illuminate\Http\JsonResponse
@@ -185,5 +189,32 @@ class ProductController extends Controller
     public function getProductRating($id): \Illuminate\Http\JsonResponse
     {
         return $this->productRatingService->getTotalRatingOfProduct($id);
+    }
+
+    public function likeProducts(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+        ])) return $errors;
+
+        return $this->productUserLikeService->likeProduct($request);
+
+    }
+
+    public function dislikeProducts(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'user_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+        ])) return $errors;
+        return $this->productUserLikeService->dislikeProduct($request);
+
+    }
+
+    public function getLikedProducts($id)
+    {
+        //user_id
+        return $this->productUserLikeService->getLikedProducts($id);
     }
 }

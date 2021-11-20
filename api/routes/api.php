@@ -30,12 +30,15 @@ Route::get('product/type/{id}', 'Product\ProductController@getByTypeId');
 Route::get('product/tag/{id}', 'Product\ProductController@getByTagId');
 Route::get('product/comment/{id}', 'Product\ProductController@getComments');
 Route::get('product/comment-likes/{id}', 'Product\ProductController@getLikesTotalCount');
+Route::get('product/save/{id}', 'Product\ProductController@getLikedProducts');
 Route::post('product/like/comment', 'Product\ProductController@likeComment');
 Route::post('product', 'Product\ProductController@create');
 Route::post('product/basket', 'Product\ProductController@addToBasket');
 Route::post('product/add-tag', 'Product\ProductController@addToProduct');
 Route::post('product/comment', 'Product\ProductController@addComment');
+Route::post('product/save', 'Product\ProductController@likeProducts');
 Route::delete('product/{id}', 'Product\ProductController@deleteById');
+Route::delete('product/save/remove', 'Product\ProductController@dislikeProducts');
 Route::delete('product/dislike/comment', 'Product\ProductController@dislikeComment');
 
 //role
@@ -94,6 +97,11 @@ Route::post('comment', 'Comment\CommentController@add');
 //Route::post('comment/like/{id}', 'Comment\CommentController@likeComment');
 Route::put('comment/{id}', 'Comment\CommentController@commentEdit');
 Route::delete('comment/{id}', 'Comment\CommentController@commentDelete');
+
+//friends
+Route::post('friend', 'Friend\FriendController@add');
+Route::delete('friend', 'Friend\FriendController@remove');
+Route::get('friend/{id}', 'Friend\FriendController@getFriends');
 
 ////category
 //Route::get('category', 'Category\CategoryController@category');

@@ -100,7 +100,6 @@ class PostController extends Controller
 
     public function dislikePost(Request $request)
     {
-        error_log("req");
         if ($errors = $this->validatorService->validate($request, [
             'user_id' => 'required|numeric',
             'post_id' => 'required|numeric',
