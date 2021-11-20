@@ -112,4 +112,9 @@ class PostController extends Controller
     {
         return $this->postLikeService->getLikesTotalCount($id);
     }
+
+    public function addViews($id)
+    {
+        return $this->postService->addViewsToPost($id);
+    }
 }

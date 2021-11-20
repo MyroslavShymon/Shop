@@ -73,4 +73,15 @@ class PostService
         return response()->json(Post::where('user_id', $id)->get(), 200);
     }
 
+    public function addViewsToPost($id)
+    {
+        ['data' => $post, 'code' => $code] = $this->getPostById($id);
+        if ($post['error'])
+            return response()->json($post, $code);
+
+        $post['views'] = $post['views'] + 1;
+        $post->save();
+
+        return response()->json($post, 200);
+    }
 }

@@ -78,6 +78,7 @@ Route::get('rating/{id}', 'Product\ProductController@getProductRating');
 Route::get('post', 'Post\PostController@getAll');
 //});
 Route::get('post/{id}', 'Post\PostController@postById');
+Route::get('post/views/{id}', 'Post\PostController@addViews');
 Route::get('post/user/{id}', 'Post\PostController@getByUserId');
 //Route::get('post/category/{id}', 'Post\PostController@postByCategoryId');
 Route::post('post', 'Post\PostController@postSave');
@@ -102,6 +103,11 @@ Route::delete('comment/{id}', 'Comment\CommentController@commentDelete');
 Route::post('friend', 'Friend\FriendController@add');
 Route::delete('friend', 'Friend\FriendController@remove');
 Route::get('friend/{id}', 'Friend\FriendController@getFriends');
+
+//messages
+Route::post('message', 'Message\MessageController@send');
+Route::delete('message/{id}', 'Message\MessageController@delete');
+
 
 ////category
 //Route::get('category', 'Category\CategoryController@category');
