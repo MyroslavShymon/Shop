@@ -5,7 +5,7 @@ import Sider from "antd/es/layout/Sider";
 import {NavLink, useHistory, useLocation} from "react-router-dom";
 import {useState} from "react";
 import {menu} from "./menu.constant";
-import {ROUTES_CONSTANTS_LOGIN} from "../../core/constants/routesConstants";
+// import {ROUTES_CONSTANTS_LOGIN} from "../core/constants/router/routes";
 import {LogoutOutlined} from "@ant-design/icons";
 import {observer} from "mobx-react-lite";
 
@@ -25,14 +25,14 @@ const  MainLayout = ({children}) => {
                 <Sider className={"sidebar"} collapsible onCollapse={() => setCollapsed(!collapsed)}>
                     <div className="logo"/>
                     <Menu theme="dark" mode="inline" selectedKeys={[location.pathname]}>
-                        {menu.map(item =>
-                            <Menu.Item key={item.link} icon={item.icon}>
-                                <NavLink to={item.link}>
-                                    {item.title}
-                                </NavLink>
-                            </Menu.Item>
-                        )}
-                        <Menu.Item onClick={logout} key={"logout"} icon={<LogoutOutlined style={{fontSize: "150%"}}/>}>Logout</Menu.Item>
+                        {/*{menu.map(item =>*/}
+                        {/*    <Menu.Item key={item.link} icon={item.icon}>*/}
+                        {/*        <NavLink to={item.link}>*/}
+                        {/*            {item.title}*/}
+                        {/*        </NavLink>*/}
+                        {/*    </Menu.Item>*/}
+                        {/*)}*/}
+                        {/*<Menu.Item onClick={logout} key={"logout"} icon={<LogoutOutlined style={{fontSize: "150%"}}/>}>Logout</Menu.Item>*/}
                     </Menu>
                 </Sider>
                 <Layout className="site-layout">

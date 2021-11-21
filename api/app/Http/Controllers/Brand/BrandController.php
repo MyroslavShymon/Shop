@@ -18,6 +18,13 @@ class BrandController extends Controller
         $this->validatorService = $validatorService;
     }
 
+    /**
+     * @OA\Get(
+     *     path="/",
+     *     description="Home page",
+     *     @OA\Response(response="default", description="Welcome page dd")
+     * )
+     */
     public function create(Request $request)
     {
         if ($errors = $this->validatorService->validate($request, [
