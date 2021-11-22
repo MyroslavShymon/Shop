@@ -45,7 +45,7 @@ class UserController extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['error' => $validator->messages()], 400);
         }
 
 
@@ -74,7 +74,7 @@ class UserController extends Controller
                 'role' => $userRole
             ],
             'token' => JWTAuth::attempt($credentials)
-        ], Response::HTTP_OK);
+        ], 201);
     }
 
     public function login(Request $request)
@@ -89,7 +89,7 @@ class UserController extends Controller
 
         //Send failed response if request is not valid
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->messages()], 200);
+            return response()->json(['error' => $validator->messages()], 400);
         }
 
         //Request is validated
@@ -110,19 +110,20 @@ class UserController extends Controller
                 'message' => 'Could not create token.',
             ], 500);
         }
-
+        $user_roles = DB::table('user_roles')->
+        where('user_id', auth()->user()->id)->
+        leftJoin('roles', 'user_roles.role_id', '=', 'roles.id')->
+        select('roles.*')->
+        get();
         //Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
-            'token' => $this->createNewToken($token),
-        ]);
-    }
-
-    protected function createNewToken($token)
-    {
-        return response()->json([
-            'access_token' => $token,
-            'user' => auth()->user()
+            'message' => "Login success",
+            'data' => [
+                'user' => auth()->user(),
+                'role' => $user_roles
+            ],
+            'token' => $token
         ]);
     }
 

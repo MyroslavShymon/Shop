@@ -17,7 +17,7 @@ class ProductFactory extends Factory
             'name' => $this->faker->word(),
             'description' => $this->faker->text(),
             'price' => $this->faker->randomFloat(1, 1, 1000),
-            'image' => '/api/image/' . $this->faker->randomNumber(1, 20),
+            'image' => '/api/image/' . $this->faker->randomNumber(1, 20) . '.jpg',
             'brand_id' => $this->faker->randomNumber(1, 30),
             'type_id' => $this->faker->randomNumber(1, 30),
             'user_id' => $this->faker->randomNumber(1, 30),

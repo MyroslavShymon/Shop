@@ -1,0 +1,25 @@
+.main-layout__title{
+    color: white !important;
+    cursor: pointer;
+    margin: 0 !important;
+}
+.main-layout__header{
+    position: fixed;
+    z-index: 1;
+    width: 100%;
+}
+.main-layout__content{
+    padding: 0 50px;
+    margin-top: 64px;
+}
+.main-layout{
+    padding: 24px;
+    text-align: center;
+}
+.main-layout__wrapper{
+    min-height: 100vh;
+}
+.main-layout__menu{
+    display: flex;
+    justify-content: end;
+ }

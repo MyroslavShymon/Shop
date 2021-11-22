@@ -1,14 +1,24 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {observer} from "mobx-react-lite";
-import {Redirect, Route, Switch} from "react-router-dom";
+import {Redirect, Route, Switch, useHistory} from "react-router-dom";
 import {router} from "./core/constants/router";
-import types from "./core/constants/layout/types";
+import types from "./core/constants/layout/types.constant";
 import {AdminLayout, EmptyLayout, MainLayout} from "./layout";
-import {routes} from "./core/constants/router/routes";
+import {routesConstant} from "./core/constants/router/routes.constant";
+import user from "./store/user";
 
 function AppRouter(props) {
-    const [isAuth, setIsAuth] = useState(true);
-    const [isAdmin, setIsAdmin] = useState(true);
+    const history = useHistory()
+    useEffect(() => {
+        user.getToken();
+        if (!user.isAuth) {
+            history.push(routesConstant.login)
+        } else {
+            history.push(routesConstant.main)
+        }
+    }, []);
+
+    console.log("isAuth", user.isAuth, "isAdmin", user.isAdmin, "user", user.user)
 
     return (
         <Switch>
@@ -21,9 +31,9 @@ function AppRouter(props) {
                         render={() => {
                             switch (route.type) {
                                 case types.MAIN :
-                                    return isAuth && <MainLayout>{route.component}</MainLayout>;
+                                    return user.isAuth && <MainLayout>{route.component}</MainLayout>;
                                 case types.ADMIN :
-                                    return isAdmin && <AdminLayout>{route.component}</AdminLayout>;
+                                    return user.isAdmin && <AdminLayout>{route.component}</AdminLayout>;
                                 default :
                                     return <EmptyLayout>{route.component}</EmptyLayout>
                             }
@@ -32,7 +42,7 @@ function AppRouter(props) {
                     />
                 )
             }
-            {isAuth ? <Redirect to={routes.main}/> : <Redirect to={routes.login}/>}
+            {user.isAuth ? <Redirect to={routesConstant.main}/> : <Redirect to={routesConstant.login}/>}
         </Switch>
     );
 }

@@ -1,0 +1,9 @@
+.card__wrapper{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.type-name{
+    cursor: pointer;
+}

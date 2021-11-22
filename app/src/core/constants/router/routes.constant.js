@@ -1,8 +1,9 @@
-const routes = Object.freeze({
+const routesConstant = Object.freeze({
     newsFeed: "/feed",
     login: "/login",
     registration: "/registration",
-    user: "/user/:id",
+    user: "/friend/:id",
+    currentUser: "/user/:id",
     main: "/",
     tag: "/tag/:id",
     type: "/type/:id",
@@ -18,4 +19,4 @@ const routes = Object.freeze({
     adminRole: "/admin/role",
 })
 
-export {routes};
+export {routesConstant};

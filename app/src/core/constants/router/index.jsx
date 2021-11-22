@@ -1,5 +1,5 @@
-import {routes} from "./routes";
-import types from "../layout/types";
+import {routesConstant} from "./routes.constant";
+import types from "../layout/types.constant";
 import {
     Login,
     Main,
@@ -19,109 +19,116 @@ import {
     Tag,
     SavedProductsList
 } from "../../../pages";
+import CurrentUser from "../../../pages/CurrentUserPage";
 
 export const router = [
     {
         name: 'Login',
-        path: routes.login,
+        path: routesConstant.login,
         type: types.EMPTY,
         component: <Login/>
     },
     {
         name: 'Registration',
-        path: routes.registration,
+        path: routesConstant.registration,
         type: types.EMPTY,
         component: <Registration/>
     },
     {
         name: 'Feed',
-        path: routes.newsFeed,
+        path: routesConstant.newsFeed,
         type: types.MAIN,
         component: <NewsFeed/>
     },
     {
         name: 'User',
-        path: routes.user,
+        path: routesConstant.user,
         type: types.MAIN,
         component: <User/>
     },
     {
         name: 'Main',
-        path: routes.main,
+        path: routesConstant.main,
         type: types.MAIN,
         component: <Main/>
     },
     {
         name: 'Tag',
-        path: routes.tag,
+        path: routesConstant.tag,
         type: types.MAIN,
         component: <Tag/>
     },
     {
         name: 'ProductType',
-        path: routes.type,
+        path: routesConstant.type,
         type: types.MAIN,
         component: <ProductType/>
     },
     {
         name: 'SavedProductsList',
-        path: routes.savedProductsList,
+        path: routesConstant.savedProductsList,
         type: types.MAIN,
         component: <SavedProductsList/>
     },
     {
         name: 'Product',
-        path: routes.product,
+        path: routesConstant.product,
         type: types.MAIN,
         component: <Product/>
     },
     {
         name: 'Post',
-        path: routes.post,
+        path: routesConstant.post,
         type: types.MAIN,
         component: <Post/>
     },
     {
         name: 'Messages',
-        path: routes.message,
+        path: routesConstant.message,
         type: types.MAIN,
         component: <Messenger/>
     },
     {
         name: 'Friends',
-        path: routes.friends,
+        path: routesConstant.friends,
         type: types.MAIN,
         component: <FriendsList/>
     },
     {
         name: 'Brands',
-        path: routes.brands,
+        path: routesConstant.brands,
         type: types.MAIN,
         component: <BrandsList/>
     },
     {
         name: 'Brand',
-        path: routes.brand,
+        path: routesConstant.brand,
         type: types.MAIN,
         component: <Brand/>
     },
     {
         name: 'AdminBrand',
-        path: routes.adminBrand,
+        path: routesConstant.adminBrand,
         type: types.ADMIN,
         component: <BrandAdminPage/>
     },
     {
         name: 'RoleBrand',
-        path: routes.adminRole,
+        path: routesConstant.adminRole,
         type: types.ADMIN,
         component: <RoleAdminPage/>
     },
     {
         name: 'TypeBrand',
-        path: routes.adminType,
+        path: routesConstant.adminType,
         type: types.ADMIN,
         component: <TypeAdminPage/>
+    },
+    {
+        name: 'CurrentUser',
+        path: routesConstant.currentUser,
+        type: types.MAIN,
+        component: <CurrentUser/>
     },
 ];
 

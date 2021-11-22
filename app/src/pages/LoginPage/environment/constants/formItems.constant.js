@@ -1,8 +1,4 @@
-export const formItemsConstantsRegistration = [
-    {
-        label: "Name",
-        name: "name",
-    },
+export const formItemsConstant = [
     {
         label: "Email",
         name: "email",
