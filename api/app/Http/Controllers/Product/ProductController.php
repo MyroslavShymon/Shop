@@ -41,7 +41,7 @@ class ProductController extends Controller
         ProductCommentService     $productCommentService,
         ProductLikeCommentService $productLikeCommentService,
         ProductRatingService      $productRatingService,
-        ProductUserLikeService $productUserLikeService
+        ProductUserLikeService    $productUserLikeService
     )
     {
         $this->productBasketService = $productBasketService;
@@ -81,6 +81,11 @@ class ProductController extends Controller
         return $this->productService->getAllProducts();
     }
 
+    public function getProductsInBasket($id): \Illuminate\Http\JsonResponse
+    {
+        return $this->productService->getProductsInBasket($id);
+    }
+
     public function getByUserId($id): \Illuminate\Http\JsonResponse
     {
         return $this->productService->getAllProductsByUserId($id);
@@ -103,6 +108,26 @@ class ProductController extends Controller
         ])) return $errors;
 
         return $this->productBasketService->addProductToBasket($request);
+    }
+
+    public function isProductInBasket(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'basket_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+        ])) return $errors;
+
+        return $this->productBasketService->isProductInBasket($request);
+    }
+
+    public function removeFromBasket(Request $request)
+    {
+        if ($errors = $this->validatorService->validate($request, [
+            'basket_id' => 'required|numeric',
+            'product_id' => 'required|numeric',
+        ])) return $errors;
+
+        return $this->productBasketService->removeFromBasket($request);
     }
 
     public function addViews($id)
@@ -183,7 +208,7 @@ class ProductController extends Controller
             'product_id' => 'required|numeric',
             'rate' => 'max:5|min:1|required|numeric',
         ])) return $errors;
-       return $this->productRatingService->addRating($request);
+        return $this->productRatingService->addRating($request);
     }
 
     public function getProductRating($id): \Illuminate\Http\JsonResponse

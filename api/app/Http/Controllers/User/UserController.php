@@ -63,6 +63,14 @@ class UserController extends Controller
             'user_id' => $user->id
         ]);
 
+        $user_roles = DB::table('user_roles')->
+        where('user_id', $user->id)->
+        leftJoin('roles', 'user_roles.role_id', '=', 'roles.id')->
+        select('roles.*')->
+        get();
+
+        $basket_id = DB::table('baskets')->where('user_id', $user->id)->first()->id;
+
         $this->basketService->createBasket($user->id);
 
         //User created, return success response
@@ -71,8 +79,9 @@ class UserController extends Controller
             'message' => 'User created successfully',
             'data' => [
                 'user' => $user,
-                'role' => $userRole
+                'role' => $user_roles
             ],
+            'basket' => $basket_id,
             'token' => JWTAuth::attempt($credentials)
         ], 201);
     }
@@ -115,6 +124,8 @@ class UserController extends Controller
         leftJoin('roles', 'user_roles.role_id', '=', 'roles.id')->
         select('roles.*')->
         get();
+
+        $basket_id = DB::table('baskets')->where('user_id', auth()->user()->id)->first()->id;
         //Token created, return with success response and jwt token
         return response()->json([
             'success' => true,
@@ -123,6 +134,7 @@ class UserController extends Controller
                 'user' => auth()->user(),
                 'role' => $user_roles
             ],
+            'basket' => $basket_id,
             'token' => $token
         ]);
     }

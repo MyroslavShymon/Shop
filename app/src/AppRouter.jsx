@@ -42,7 +42,7 @@ function AppRouter(props) {
                     />
                 )
             }
-            {user.isAuth ? <Redirect to={routesConstant.main}/> : <Redirect to={routesConstant.login}/>}
+            {/*{user.isAuth ? <Redirect to={routesConstant.main}/> : <Redirect to={routesConstant.login}/>}*/}
         </Switch>
     );
 }

@@ -47,6 +47,7 @@ Route::get('image/{filename}', 'Photo\PhotoController@image');
 
 //product
 Route::get('product', 'Product\ProductController@getAll');//головна сторінка
+Route::get('product/in-basket/{id}', 'Product\ProductController@getProductsInBasket');//головна сторінка
 Route::get('product/{id}', 'Product\ProductController@getById');//сторінка товару
 Route::get('product/user/{id}', 'Product\ProductController@getByUserId');//сторінка користувача
 Route::get('product/views/{id}', 'Product\ProductController@addViews');//додати прегляди до продуктів
@@ -56,15 +57,17 @@ Route::get('product/tag/{id}', 'Product\ProductController@getByTagId');//сто�
 Route::get('product/comment/{id}', 'Product\ProductController@getComments');//сторінка товару получити коменти під продукто з id
 Route::get('product/comment-likes/{id}', 'Product\ProductController@getLikesTotalCount');//сторінка товару кількість лайків під коментарем товаром
 Route::get('product/save/{id}', 'Product\ProductController@getLikedProducts');//сторінка збереженого...получити збережені товари користувачів !!!
+Route::post('product/is/basket', 'Product\ProductController@isProductInBasket');//чи продукт в корзині
+Route::post('product/add-tag', 'Product\ProductController@addToProduct');//добавити тег до товара ... сторінка користувача
 Route::post('product/like/comment', 'Product\ProductController@likeComment');//сторінка товару лайкнути коментар
 Route::post('product', 'Product\ProductController@create');//сторінка користувача ... дорати продукт
 Route::post('product/basket', 'Product\ProductController@addToBasket');//головна сторінка або сторінка конкретного товару  ... додати товар до кошика
-Route::post('product/add-tag', 'Product\ProductController@addToProduct');//добавити тег до товара ... сторінка користувача
 Route::post('product/comment', 'Product\ProductController@addComment');//додати комент до продукта ... на сторінці користувача або на сторінці товару або на головній стрічці
 Route::post('product/save', 'Product\ProductController@likeProducts');//додати до збережених товар ... на всіх сторінках на яких відображається товар
 Route::delete('product/{id}', 'Product\ProductController@deleteById');//видалити товар ... на всіх сторінках на яких відображається товар
 Route::delete('product/save/remove', 'Product\ProductController@dislikeProducts');//видалаити зі збережених ... на всіх сторінках на яких відображається товар
 Route::delete('product/dislike/comment', 'Product\ProductController@dislikeComment');//відізвати лайк з коменту під продуктом ... всі сторінки на яких можна подивитись коментарі під продуктом
+Route::post('product/remove/basket', 'Product\ProductController@removeFromBasket');//видалити з корзини
 
 //role
 Route::post('role', 'Role\RoleController@create');//додати роль ... сторінка ролі

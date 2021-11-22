@@ -1,6 +1,7 @@
 import {makeAutoObservable} from "mobx";
 import {$host} from "../http";
 import ErrorHandler from "./error/error.handler";
+import {localStorageConstants} from "../core/constants/localStorage.constants";
 
 class User {
     isAdmin = false
@@ -17,7 +18,8 @@ class User {
     }
 
     getToken = () => {
-        const userData = JSON.parse(localStorage.getItem('user'));
+        const userData = JSON.parse(localStorage.getItem(localStorageConstants.USER));
+        this.user.data = userData;
         if (userData) {
             this.isAuth = true
         }
@@ -26,12 +28,23 @@ class User {
         }
     }
 
+    setToken = () => {
+        localStorage.removeItem(localStorageConstants.USER)
+    }
+
+    logout = () => {
+        this.user = {};
+        this.isAuth = false;
+        this.isAdmin = false;
+        this.setToken();
+    }
+
     login = async (user) => {
         try {
             this.user = {loading: true}
             const {data: userResponse} = await $host.post(`api/auth/login`, user)
 
-            localStorage.setItem("user", JSON.stringify(userResponse))
+            localStorage.setItem(localStorageConstants.USER, JSON.stringify(userResponse))
 
             this.user = {
                 message: "Залогінений",
@@ -50,7 +63,7 @@ class User {
             this.user = {loading: true}
             const {data: userResponse} = await $host.post(`api/auth/registration`, user)
             console.log("user register", userResponse)
-            localStorage.setItem("user", JSON.stringify(userResponse))
+            localStorage.setItem(localStorageConstants.USER, JSON.stringify(userResponse))
 
             this.user = {
                 message: "Зареєстрований",

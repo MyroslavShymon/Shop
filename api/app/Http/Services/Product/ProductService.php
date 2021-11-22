@@ -6,6 +6,7 @@ use App\Http\Services\File\FileService;
 use Illuminate\Http\Request;
 use File;
 use App\Models\Product;
+use Illuminate\Support\Facades\DB;
 use Validator;
 
 class ProductService
@@ -40,6 +41,15 @@ class ProductService
     public function getAllProducts(): \Illuminate\Http\JsonResponse
     {
         return response()->json(Product::get(), 200);
+    }
+
+    public function getProductsInBasket($id)
+    {
+        return response()->json(DB::table('products')->
+        leftJoin('product_baskets', 'products.id', '=', 'product_baskets.product_id')->
+        where('product_baskets.basket_id', $id)->
+        select('products.*', 'product_baskets.*')->
+        get(), 200);
     }
 
     public function getAllProductsByUserId($id): \Illuminate\Http\JsonResponse

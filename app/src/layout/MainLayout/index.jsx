@@ -10,6 +10,7 @@ import {observer} from "mobx-react-lite";
 import Title from "antd/es/typography/Title";
 import {routesConstant} from "../../core/constants/router/routes.constant";
 import "./index.css"
+import user from "../../store/user";
 
 const MainLayout = ({children}) => {
     const location = useLocation();
@@ -24,12 +25,13 @@ const MainLayout = ({children}) => {
     return (
         <Layout>
             <Header className="main-layout__header"
-                    // collapsible
-                    // onCollapse={() => setCollapsed(!collapsed)}
-                >
+                // collapsible
+                // onCollapse={() => setCollapsed(!collapsed)}
+            >
                 <Row align={'middle'}> {/*<div className="logo"/>*/}
                     <Col span={3}>
-                        <Title className="main-layout__title" onClick={()=>history.push(routesConstant.main)}>Shop</Title>
+                        <Title className="main-layout__title"
+                               onClick={() => history.push(routesConstant.main)}>Shop</Title>
                     </Col>
                     {/*<Col span={9}></Col>*/}
                     <Col span={18} className="main-layout__menu">
@@ -38,12 +40,16 @@ const MainLayout = ({children}) => {
                             {/*    <Menu.Item key={"logout"}*/}
                             {/*               icon={<LogoutOutlined style={{fontSize: "150%"}}/>}>Logout</Menu.Item>*/}
                             {menu.map(item =>
-                                <Menu.Item  key={item.link} icon={item.icon}>
+                                <Menu.Item key={item.link} icon={item.icon}>
                                     <NavLink to={item.link}>
                                         {item.title}
                                     </NavLink>
                                 </Menu.Item>
                             )}
+                            <Menu.Item onClick={() => user.logout()} key={"logout"}
+                                       icon={<LogoutOutlined style={{fontSize: "115%"}}/>}>
+                                <NavLink to={routesConstant.login}/>
+                            </Menu.Item>
                         </Menu>
                     </Col>
                 </Row>

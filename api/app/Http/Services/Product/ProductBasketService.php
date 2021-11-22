@@ -18,14 +18,25 @@ class ProductBasketService
         $this->basketService = $basketService;
     }
 
-    public function isProductInBasket(Request $request): \Illuminate\Support\Collection
+    public function isProductInBasket(Request $request)
     {
         $req = $request->all();
         return
             DB::table('product_baskets')->
             where('product_id', $req['product_id'])->
             where('basket_id', $req['basket_id'])->
-            get();
+            first();
+    }
+
+    public function removeFromBasket(Request $request)
+    {
+        $req = $request->all();
+        $is_product =
+            DB::table('product_baskets')->
+            where('product_id', $req['product_id'])->
+            where('basket_id', $req['basket_id']);
+        $is_product->delete();
+        return response()->json(['error' => false, 'message' => 'Product removed from basket success'], 200);
     }
 
     public function addProductToBasket(Request $request): \Illuminate\Http\JsonResponse
@@ -40,7 +51,7 @@ class ProductBasketService
 
         $products = $this->isProductInBasket($request);
 
-        if (count($products) == 0) {
+        if (!$products) {
             $product = ProductBasket::create($request->all());
             return response()->json($product, 201);
         };
